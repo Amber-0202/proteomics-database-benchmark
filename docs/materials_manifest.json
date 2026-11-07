@@ -1,0 +1,32 @@
+[
+  {
+    "filename": "260316 Raw data - TP1.xlsx",
+    "role": "input workbook",
+    "supplied_filename": "260316 Raw data - TP1.xlsx",
+    "size_bytes": 7383597,
+    "sha256": "a759522cdcc85b253e259031ee54d4f8aa1818bf8b6e8bcc235b0cc71b0cfd6c",
+    "release_asset": "TP1.xlsx"
+  },
+  {
+    "filename": "260316 Raw data - PS1.xlsx",
+    "role": "input workbook",
+    "supplied_filename": "260316 Raw data - PS1.xlsx",
+    "size_bytes": 29481373,
+    "sha256": "2656ed282077391e7c0c5929d6fbfb04865932850a7fa72d940916e286e94d5a",
+    "release_asset": "PS1.xlsx"
+  },
+  {
+    "filename": "comparison_final_updated.pdf",
+    "role": "reported timing summary",
+    "supplied_filename": "comparison_final_updated(3).pdf",
+    "size_bytes": 861270,
+    "sha256": "103012a1e30ba1a77904b1d4eacda3d6825f7e9733d3bb5eef571daf91f5ae26"
+  },
+  {
+    "filename": "organism.csv",
+    "role": "exported metadata",
+    "supplied_filename": "data-1794054984236.csv",
+    "size_bytes": 77,
+    "sha256": "649113a30e2aeb7bdd16f6b60505390c8c436b02f21f2760187705f80304c104"
+  }
+]

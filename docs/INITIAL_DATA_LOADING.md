@@ -16,7 +16,7 @@ python -m pip install -r requirements-import.txt
 
 The requirements file lists dependencies, not a frozen version record of the original experiment. PostgreSQL uses Psycopg 3 (`psycopg`), not `psycopg2`. MongoDB uses PyMongo. Excel input uses pandas/openpyxl. MongoDB migration and index setup additionally require mongosh.
 
-Place `260316 Raw data - TP1.xlsx` and `260316 Raw data - PS1.xlsx` in `data/raw/`, or set `TP1_FILE` / `PS1_FILE`. Both `quantification` and `analysis` sheets are required. Use the exact project workbooks and preserve row order. Do not treat similarly named spreadsheet revisions as interchangeable.
+Download TP1.xlsx and PS1.xlsx from the [input release](../data/raw/README.md), rename them `260316 Raw data - TP1.xlsx` and `260316 Raw data - PS1.xlsx`, and place them in `data/raw/`, or set `TP1_FILE` / `PS1_FILE`. Both `quantification` and `analysis` sheets are required. Use the exact project workbooks and preserve row order. Do not treat similarly named spreadsheet revisions as interchangeable.
 
 Connection defaults are local MongoDB and PostgreSQL `localhost:5432`, database `protehome`, user `postgres`. Optional overrides are listed in [the environment example](import_environment.example). The example is not automatically loaded. PostgreSQL prompts for a password unless `PGPASSWORD` is set. MongoDB uses `MONGO_URI` and `MONGO_P1_DB`. Existing JavaScript migration/index scripts use the thesis database names; if overriding the P1 name, adapt those settings consistently.
 
@@ -48,11 +48,12 @@ Restore/create the schema using [the schema instructions](../postgresql/schema/R
 
 ```sh
 psql -h localhost -p 5432 -U postgres -d protehome -v ON_ERROR_STOP=1 -f postgresql/data/00_base_metadata.sql
+psql -h localhost -p 5432 -U postgres -d protehome -v ON_ERROR_STOP=1 -f postgresql/data/01_organism.sql
 ```
 
-Use your own deployment connection settings if different. This export supplies the Project, Dataset, experimental-structure and Sample rows required by the six Python scripts. It is a one-time transactional insert, not an upsert. **The referenced Organism record (taxonomy ID 10090) is still required separately** before the entity loaders; it is not included in this export. A schema-only dump does not populate metadata.
+Use your own deployment connection settings if different. This export supplies the Project, Dataset, experimental-structure and Sample rows required by the six Python scripts. It is a one-time transactional insert, not an upsert. The separately supplied `organism.csv` and generated `01_organism.sql` provide the referenced Organism record (taxonomy ID 10090); run the latter before the entity loaders. A schema-only dump does not populate metadata.
 
-The supplied base export retains the recorded values below, except for the separately required Organism record:
+The base export plus the separately supplied Organism record retain the following metadata:
 
 - `Dataset` IDs 1 (TP1) and 2 (PS1), plus any referenced project/structure records;
 - `Organism` taxonomy ID 10090 and any referenced records;
@@ -92,4 +93,4 @@ Source emergent-summary/model-flag discrepancies are reported and preserved by t
 
 ## Validation during repository preparation
 
-See [the preparation check record](IMPORT_VERIFICATION.md). No database imports, repairs, migrations or benchmark experiments were executed while organising these files. The base metadata export is now included. Actual workbooks, the referenced Organism row and original measurement records must still accompany the repository before it can be described as a complete reproduction package.
+See [the preparation check record](IMPORT_VERIFICATION.md). No database imports, repairs, migrations or benchmark experiments were executed while organising these files. The base metadata, Organism export, original workbook assets and [comparison PDF](../results/README.md) are supplied. Per-query screenshots and raw Explain output files are not included. The PDF is the retained measurement record, including its reported per-run times; it does not constitute a new benchmark execution. A complete end-to-end database reconstruction was not executed while preparing these materials.
