@@ -46,4 +46,4 @@ The files use the deployed field names and value domains. Fields named `defectiv
 
 ## Preparation still required
 
-The schema, indexes and populated datasets are not in this first query-only package. Add those materials and their execution order before treating the repository as a complete reconstruction package. Keep measured baseline and optimised index configurations distinguishable when those definitions are supplied.
+The recorded schema and index snapshot are now supplied; see [schema and index preparation](SCHEMA_AND_INDEX_GUIDE.md). Populated datasets, import/migration scripts and measurement records remain to be added. The recorded index snapshot does not document every historical baseline/optimised index state. Keep the source configuration and actual plan evidence associated with each measured series when reconstructing experiments.

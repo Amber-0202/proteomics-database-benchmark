@@ -4,11 +4,15 @@ Code and experimental materials supporting the thesis *Understanding the Impact 
 
 ## Current contents
 
-This first preparation step contains the final benchmark queries and a guide to their execution context. Database schemas, index definitions, data import and migration scripts, datasets, and measurement records will be added separately. This snapshot alone does not recreate the databases.
+The repository currently contains the final benchmark queries, the PostgreSQL schema, and the recorded PostgreSQL and MongoDB index definitions. Data import and migration scripts, datasets, and measurement records will be added separately. This snapshot creates database structures and provides queries, but does not yet populate the prototype data.
 
 | Path | Contents |
 | --- | --- |
 | `postgresql/queries/` | Eight PostgreSQL query bodies, Q1-Q8 |
+| `postgresql/schema/` | Complete schema-only export, portable table/constraint setup, and explicit indexes |
+| `mongodb/pattern1/indexes.js`, `mongodb/pattern2/indexes.js` | Collection and index setup for the recorded snapshot |
+| `docs/SCHEMA_AND_INDEX_GUIDE.md` | Setup order, provenance and recorded-configuration scope |
+| `docs/final_indexes.md` | Supplied index inventory |
 | `mongodb/pattern1/baseline/` | Eight P1 baseline pipelines, Q1-Q8 |
 | `mongodb/pattern1/optimised/` | Five separately evaluated P1 optimisations: Q2, Q4, Q5, Q6 and Q8 |
 | `mongodb/pattern2/` | Eight P2 pipelines, Q1-Q8 |
@@ -29,7 +33,7 @@ These are file consistency checks, not a new execution of the database experimen
 
 ## Running the queries
 
-These queries require the populated prototype and the index configuration described in the thesis. See [the query guide](docs/QUERY_GUIDE.md) for the correct database and starting collection.
+These queries require the populated prototype and the index configuration described in the thesis. Start with [schema and index preparation](docs/SCHEMA_AND_INDEX_GUIDE.md); data population instructions will follow. See [the query guide](docs/QUERY_GUIDE.md) for the correct database and starting collection. The supplied index snapshot does not document all historical baseline index states.
 
 - PostgreSQL: run one `.sql` file in the prototype database. The files return query results. To inspect the timing and plan used by the benchmark, prepend `EXPLAIN (ANALYZE, BUFFERS)` to the statement.
 - MongoDB Compass: select the documented database and collection, open the Aggregations text editor, and paste the complete array from the corresponding `.json` file. The JSON files are pipeline arrays, not Compass saved-pipeline metadata files.
