@@ -21,7 +21,7 @@ mongosh "mongodb://localhost:27017" --file mongodb/pattern1/indexes.js
 mongosh "mongodb://localhost:27017" --file mongodb/pattern2/indexes.js
 ```
 
-Each script selects its recorded database (`proteomics_pattern1` or `proteomics_pattern2`), creates any missing named collections, then adds the recorded non-default indexes with their recorded names and key order. MongoDB supplies the default `_id_` indexes. No JSON-schema validators are added, because none were provided in this evidence. Document layout is established by the data loaders and migration. An equivalent P1-to-P2 reconstruction is now supplied; see [the migration guide](IMPORT_AND_MIGRATION_GUIDE.md). The initial P1/PostgreSQL loaders remain to be added.
+Each script selects its recorded database (`proteomics_pattern1` or `proteomics_pattern2`), creates any missing named collections, then adds the recorded non-default indexes with their recorded names and key order. MongoDB supplies the default `_id_` indexes. No JSON-schema validators are added, because none were provided in this evidence. Document layout is established by the data loaders and migration. An equivalent P1-to-P2 reconstruction is now supplied; see [the migration guide](IMPORT_AND_MIGRATION_GUIDE.md). The initial P1/PostgreSQL loaders are supplied; see [initial data loading](INITIAL_DATA_LOADING.md).
 
 The scripts do not load measurements or annotations and do not remove pre-existing indexes. Use a separate reconstruction instance to build the documented snapshot. For a populated instance, verify its inventory rather than assuming that an index setup script removes unrelated configuration.
 
@@ -43,4 +43,4 @@ Keep the query variants from step 1 distinct, and use the thesis execution plans
 - MongoDB names, key fields, directions and compound-key order are retained; the reported internal index version is not passed as a new create option.
 - Source comparison and local syntax/mock checks do not constitute a live database restore or a new full workload execution.
 
-The equivalent P1-to-P2 reconstruction is now supplied. Initial P1/PostgreSQL loaders, data files/exports and original measurements remain to be added.
+The equivalent P1-to-P2 reconstruction is now supplied. Initial P1/PostgreSQL loaders are supplied. Data inputs, PostgreSQL metadata seed/export and original measurements remain to be added; see [initial data loading](INITIAL_DATA_LOADING.md).

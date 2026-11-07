@@ -1,31 +1,11 @@
-# Initial data-loading materials still required
+# Import-material status
 
-The migration reconstruction is supplied. The original initial loaders below were not found among the project files reviewed for this preparation step. Their absence from this repository does not mean they never existed.
+The original P1 and PostgreSQL initial-loading files requested in the previous preparation step have now been supplied. The eight organised scripts and their order are described in [Initial data loading](INITIAL_DATA_LOADING.md). They are no longer missing.
 
-## MongoDB Pattern 1 loader
+Materials still required:
 
-Provide the actual `.py`, `.ipynb`, `.js` or other source used to:
+1. The actual TP1 and PS1 Excel inputs, or a documented alternative restore route.
+2. The original PostgreSQL metadata seed/import SQL or data export for datasets, samples, sample groups, conditions and other referenced metadata. The six Python loaders assume those records already exist. Do not infer new IDs or group assignments and describe them as the measured configuration.
+3. Original benchmark measurement records and their execution/plan context.
 
-- Read the selected TP1 abundance spreadsheet/matrix and parse the 48 sample names into model, stimulation state and replicate.
-- Create the two dataset records and P1 sample documents, including embedded measurements and their source identifiers.
-- Read the selected PS1 analysis sheet into `phosphopeptide_summaries`.
-- Construct phosphopeptide identifiers, protein identifiers and `linkedProteinAnalyteId`, handle missing values, and map regulation flags/directions.
-
-Include the input filenames, sheet names/header-row settings, any intermediate files and any manual edits required after the initial run. Do not substitute a newly guessed mapping for the historical one.
-
-## PostgreSQL loader
-
-Provide the actual Python, SQL/COPY scripts, notebooks, or saved import procedure used to populate the implemented schema, particularly:
-
-- `Dataset`, `Analyte`, `Sample`, `Quantification`, sample groups and experimental conditions.
-- UniProt/gene annotation relations used by the queries.
-- `PhosphopeptideRegulation` and `PhosphopeptideModelRegulation`, including protein-analyte links.
-- Identifier assignments, including TP1 dataset ID 1, and loading order for foreign keys.
-
-A schema-only dump creates structure but does not replace these data-loading materials.
-
-## If the original loaders were not retained
-
-Record that explicitly. A database export plus documented restore instructions can provide the measured prototype data as an alternative reconstruction route. Any newly reconstructed loader must be labelled accordingly and checked against the exported measured database before being presented as reproducing it. Do not claim the original import code has been recovered.
-
-Actual input datasets/exports and timing records will be organised in a subsequent step. Review local connection settings before sharing source files, and replace personal passwords with configurable settings.
+The exact historical P1-to-P2 migration script remains unavailable; its supplied equivalent reconstruction is explicitly labelled. New initial loaders do not change that provenance. See [the migration guide](IMPORT_AND_MIGRATION_GUIDE.md).

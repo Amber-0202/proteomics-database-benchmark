@@ -1,0 +1,13 @@
+# Optional environment settings; copy needed values into your shell.
+# This file is an example, not automatically loaded by the scripts.
+# Default input directory: <repository>/data/raw/
+# export TP1_FILE="/absolute/path/260316 Raw data - TP1.xlsx"
+# export PS1_FILE="/absolute/path/260316 Raw data - PS1.xlsx"
+export MONGO_URI="mongodb://localhost:27017/"
+export MONGO_P1_DB="proteomics_pattern1"
+export PGHOST="localhost"
+export PGPORT="5432"
+export PGDATABASE="protehome"
+export PGUSER="postgres"
+# PostgreSQL scripts prompt for a password unless PGPASSWORD is already set.
+# Do not commit passwords or credential-bearing connection URIs.

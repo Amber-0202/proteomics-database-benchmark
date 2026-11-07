@@ -4,7 +4,7 @@ Code and experimental materials supporting the thesis *Understanding the Impact 
 
 ## Current contents
 
-The repository currently contains the final benchmark queries, the PostgreSQL schema, recorded PostgreSQL and MongoDB index definitions, and an explicitly labelled equivalent reconstruction of the P1-to-P2 migration with read-only count checks. The initial P1/PostgreSQL data loaders, actual input datasets or database exports, and measurement records remain to be added. This snapshot does not yet recreate a populated prototype from the original inputs.
+The repository currently contains the final benchmark queries, the PostgreSQL schema, recorded PostgreSQL and MongoDB index definitions, and an explicitly labelled equivalent reconstruction of the P1-to-P2 migration with read-only count checks. Eight supplied initial-loading/repair scripts are also included. Actual workbook inputs, PostgreSQL metadata seed/export, and measurement records remain to be added. This snapshot does not yet recreate a populated prototype from the original inputs.
 
 | Path | Contents |
 | --- | --- |
@@ -13,9 +13,13 @@ The repository currently contains the final benchmark queries, the PostgreSQL sc
 | `mongodb/pattern1/indexes.js`, `mongodb/pattern2/indexes.js` | Collection and index setup for the recorded snapshot |
 | `docs/SCHEMA_AND_INDEX_GUIDE.md` | Setup order, provenance and recorded-configuration scope |
 | `docs/final_indexes.md` | Supplied index inventory |
-| `scripts/mongodb/` | Reconstructed P1-to-P2 migration and read-only count checks |
+| `scripts/mongodb/` | P1 initial import, PTM verification/repair, reconstructed P1-to-P2 migration and read-only count checks |
+| `scripts/postgresql/` | Six supplied entity, quantification, analysis and regulation loaders |
+| `docs/INITIAL_DATA_LOADING.md` | Inputs, connection settings, dependencies and import order |
+| `requirements-import.txt` | Import-script Python dependencies |
+| `docs/initial_import_manifest.csv` | Supplied filenames, organised paths and source/output checksums |
 | `docs/IMPORT_AND_MIGRATION_GUIDE.md` | Migration provenance, prerequisites and execution order |
-| `docs/MISSING_IMPORT_SCRIPTS.md` | Initial loading materials still needed |
+| `docs/MISSING_IMPORT_SCRIPTS.md` | Updated status and remaining inputs/metadata materials |
 | `mongodb/pattern1/baseline/` | Eight P1 baseline pipelines, Q1-Q8 |
 | `mongodb/pattern1/optimised/` | Five separately evaluated P1 optimisations: Q2, Q4, Q5, Q6 and Q8 |
 | `mongodb/pattern2/` | Eight P2 pipelines, Q1-Q8 |
@@ -36,7 +40,7 @@ These are file consistency checks, not a new execution of the database experimen
 
 ## Running the queries
 
-These queries require the populated prototype and the index configuration described in the thesis. Start with [schema and index preparation](docs/SCHEMA_AND_INDEX_GUIDE.md); data population instructions will follow. See [the query guide](docs/QUERY_GUIDE.md) for the correct database and starting collection. The supplied index snapshot does not document all historical baseline index states.
+These queries require the populated prototype and the index configuration described in the thesis. Start with [schema and index preparation](docs/SCHEMA_AND_INDEX_GUIDE.md); then follow [initial data loading](docs/INITIAL_DATA_LOADING.md). See [the query guide](docs/QUERY_GUIDE.md) for the correct database and starting collection. The supplied index snapshot does not document all historical baseline index states.
 
 - PostgreSQL: run one `.sql` file in the prototype database. The files return query results. To inspect the timing and plan used by the benchmark, prepend `EXPLAIN (ANALYZE, BUFFERS)` to the statement.
 - MongoDB Compass: select the documented database and collection, open the Aggregations text editor, and paste the complete array from the corresponding `.json` file. The JSON files are pipeline arrays, not Compass saved-pipeline metadata files.
@@ -48,4 +52,4 @@ P1 uses `proteomics_pattern1`; P2 uses `proteomics_pattern2`. In the recorded Po
 
 The queries retain their recorded identifiers and output limits: the selected protein label is `Akt1`, Q7 selects `Pcm1`, and Q8 selects `DEX`. They are prototype operations, not a complete multi-study exploration application. Q3 counts phosphopeptide-summary records, not deduplicated biological phosphorylation sites.
 
-See [the import and migration guide](docs/IMPORT_AND_MIGRATION_GUIDE.md) for the supplied reconstruction and [the missing-materials checklist](docs/MISSING_IMPORT_SCRIPTS.md) for the initial loaders. Data source and restoration/loading instructions will accompany the remaining materials.
+See [initial data loading](docs/INITIAL_DATA_LOADING.md) for the eight supplied Python scripts and [the migration guide](docs/IMPORT_AND_MIGRATION_GUIDE.md) for the P1-to-P2 reconstruction. The six PostgreSQL loaders require pre-existing metadata records; a schema-only restore is insufficient. See [remaining materials](docs/MISSING_IMPORT_SCRIPTS.md) for the precise outstanding items.

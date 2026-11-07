@@ -1,0 +1,6 @@
+# Import-script dependencies. These are not a frozen historical environment.
+numpy
+pandas
+openpyxl
+pymongo
+psycopg[binary]

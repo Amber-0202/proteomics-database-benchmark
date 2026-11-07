@@ -1,6 +1,6 @@
 # Import and migration materials
 
-## What is supplied in this step
+## Migration provenance
 
 The supplied migration record explicitly states that the exact historical P1-to-P2 script was not preserved. `scripts/mongodb/reconstructed_p1_to_p2.js` is an equivalent reconstruction of the four transformations in that record and Appendix D.3. It must not be described as a recovered original script.
 
@@ -10,7 +10,7 @@ No historical experiment was rerun while preparing this package. Syntax and mock
 
 ## Required starting point
 
-P1 must already be populated from the actual TP1/PS1 inputs. Creating empty collections and indexes in step 2 does not satisfy that requirement. The initial P1 and PostgreSQL loaders have not yet been supplied in this repository; see [the missing-materials checklist](MISSING_IMPORT_SCRIPTS.md).
+P1 must already be populated from the actual TP1/PS1 inputs. Creating empty collections and indexes in step 2 does not satisfy that requirement. The supplied P1 and PostgreSQL initial loaders are now organised in the repository; see [initial data loading](INITIAL_DATA_LOADING.md). The P1 loader must run before this reconstruction.
 
 For reconstruction, use a separate local MongoDB instance with populated P1 and empty or absent P2. This script refuses a populated target, because `$merge` alone would not remove stale records absent from the current source. It does not delete or clear any database. If interrupted after partial writes, it will refuse to run again against that now-populated target; investigate the partial reconstruction rather than treating the script as a resume procedure.
 
@@ -23,7 +23,7 @@ For reconstruction, use a separate local MongoDB instance with populated P1 and 
 
 The measurement `_id` is the source sample ObjectId string, an underscore and the source array index. This identifies the array position at migration time; it is not a biological identifier or a guarantee across source-array reordering. Protein identifiers, abundance, unit and missing flags are copied without deriving new abundance values.
 
-## Execution order after the initial P1 loader is available
+## Execution order after P1 loading
 
 From the repository root, using mongosh on the reconstruction instance:
 
