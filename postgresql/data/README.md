@@ -22,4 +22,10 @@ Use your deployment's connection settings if different. This is not an upsert: r
 
 The PS1 sample names use `BAS` while the shared basal sample-group names use `BASAL`; these are retained source names. Sample names were checked against the original quantification-sheet column headers in the supplied TP1 and PS1 workbooks. Internal references, row counts and inserted columns were checked against the schema. No live PostgreSQL import was executed during preparation.
 
-The export does **not** include `Organism`. The supplied Python loaders reference taxonomy ID 10090 through `UniProtEntry.organism`; import or verify the original Organism row before running those loaders. No organism metadata has been fabricated in this SQL. The raw workbooks and recorded benchmark measurements are separate repository materials.
+`00_base_metadata.sql` does not include `Organism`. The author has separately supplied `organism.csv`, containing `10090, Mus musculus, mouse`. `01_organism.sql` inserts exactly that exported row. Run it after the base metadata and before the Python entity loaders:
+
+```sh
+psql -h localhost -p 5432 -U postgres -d protehome -v ON_ERROR_STOP=1 -f postgresql/data/01_organism.sql
+```
+
+This is a one-time insert, not an upsert. The CSV is preserved unchanged; the SQL is generated from its fields, rather than a recovered historical import script. See [input workbooks](../../data/raw/README.md) and [recorded results](../../results/README.md) for the other materials.
