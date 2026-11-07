@@ -44,9 +44,15 @@ M1 retains expected values of 48 TP1 samples and 39,814 PS1 summary records. The
 
 ## PostgreSQL: prerequisites before the six scripts
 
-Restore/create the schema using [the schema instructions](../postgresql/schema/README.md). **The six supplied Python scripts are not a complete metadata bootstrap.** They expect foundational records to exist already. A schema-only dump does not populate them. The original metadata-loading SQL or a suitable data export is still required.
+Restore/create the schema using [the schema instructions](../postgresql/schema/README.md), then import the supplied [base metadata export](../postgresql/data/README.md):
 
-In particular, retain the actual project records and identifiers for:
+```sh
+psql -h localhost -p 5432 -U postgres -d protehome -v ON_ERROR_STOP=1 -f postgresql/data/00_base_metadata.sql
+```
+
+Use your own deployment connection settings if different. This export supplies the Project, Dataset, experimental-structure and Sample rows required by the six Python scripts. It is a one-time transactional insert, not an upsert. **The referenced Organism record (taxonomy ID 10090) is still required separately** before the entity loaders; it is not included in this export. A schema-only dump does not populate metadata.
+
+The supplied base export retains the recorded values below, except for the separately required Organism record:
 
 - `Dataset` IDs 1 (TP1) and 2 (PS1), plus any referenced project/structure records;
 - `Organism` taxonomy ID 10090 and any referenced records;
@@ -54,7 +60,7 @@ In particular, retain the actual project records and identifiers for:
 - `SampleGroup`, including `CTRL_BASAL`, `CTRL_INS`, and basal/insulin groups for `CI`, `DEX`, `TNF`, `MPQ` and `AA`;
 - `ExperimentalCondition`, `ExperimentalVariable` and `GroupCondition` mappings used by the benchmark, with their recorded IDs and relationships.
 
-This is a prerequisite list, not a newly reconstructed seed dataset. The analysis loader resolves groups by name across `SampleGroup`; preserve the recorded group mapping and avoid ambiguous duplicate names. The scripts do not invent sample assignments or group/condition metadata.
+The SQL is the supplied metadata export, retained without modifying its records. Its 100 sample names match the source quantification-sheet headers (48 TP1, 52 PS1); PS1 uses `BAS` in sample names while sample groups use `BASAL`. The analysis loader resolves groups by name across `SampleGroup`; preserve the recorded group mapping and avoid ambiguous duplicate names. The scripts do not invent sample assignments or group/condition metadata.
 
 ## PostgreSQL execution order
 
@@ -86,4 +92,4 @@ Source emergent-summary/model-flag discrepancies are reported and preserved by t
 
 ## Validation during repository preparation
 
-See [the preparation check record](IMPORT_VERIFICATION.md). No database imports, repairs, migrations or benchmark experiments were executed while organising these files. Actual workbooks, metadata seed/export and original measurement records must still accompany the repository before it can be described as a complete reproduction package.
+See [the preparation check record](IMPORT_VERIFICATION.md). No database imports, repairs, migrations or benchmark experiments were executed while organising these files. The base metadata export is now included. Actual workbooks, the referenced Organism row and original measurement records must still accompany the repository before it can be described as a complete reproduction package.

@@ -5,7 +5,7 @@ The original P1 and PostgreSQL initial-loading files requested in the previous p
 Materials still required:
 
 1. The actual TP1 and PS1 Excel inputs, or a documented alternative restore route.
-2. The original PostgreSQL metadata seed/import SQL or data export for datasets, samples, sample groups, conditions and other referenced metadata. The six Python loaders assume those records already exist. Do not infer new IDs or group assignments and describe them as the measured configuration.
+2. The original `Organism` record for taxonomy ID 10090, referenced by the entity loaders. Project, datasets, sample groups, conditions and all 100 samples are now supplied in [`postgresql/data/00_base_metadata.sql`](../postgresql/data/README.md). No new IDs or group assignments were inferred.
 3. Original benchmark measurement records and their execution/plan context.
 
 The exact historical P1-to-P2 migration script remains unavailable; its supplied equivalent reconstruction is explicitly labelled. New initial loaders do not change that provenance. See [the migration guide](IMPORT_AND_MIGRATION_GUIDE.md).

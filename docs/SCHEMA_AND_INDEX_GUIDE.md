@@ -43,4 +43,5 @@ Keep the query variants from step 1 distinct, and use the thesis execution plans
 - MongoDB names, key fields, directions and compound-key order are retained; the reported internal index version is not passed as a new create option.
 - Source comparison and local syntax/mock checks do not constitute a live database restore or a new full workload execution.
 
-The equivalent P1-to-P2 reconstruction is now supplied. Initial P1/PostgreSQL loaders are supplied. Data inputs, PostgreSQL metadata seed/export and original measurements remain to be added; see [initial data loading](INITIAL_DATA_LOADING.md).
+The equivalent P1-to-P2 reconstruction is now supplied. Initial P1/PostgreSQL loaders are supplied. Data inputs, the referenced Organism record and original measurements remain to be added; see [initial data loading](INITIAL_DATA_LOADING.md).
+
