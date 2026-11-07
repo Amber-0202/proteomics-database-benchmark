@@ -4,13 +4,15 @@ Code and experimental materials supporting the thesis *Understanding the Impact 
 
 ## Current contents
 
-The repository currently contains the final benchmark queries, the PostgreSQL schema, recorded PostgreSQL and MongoDB index definitions, and an explicitly labelled equivalent reconstruction of the P1-to-P2 migration with read-only count checks. Eight supplied initial-loading/repair scripts are also included. The supplied base metadata export is included in `postgresql/data/`. Actual workbook inputs, the referenced Organism record, and measurement records remain to be added. This snapshot does not yet recreate a populated prototype from the original inputs.
+The repository currently contains the final benchmark queries, the PostgreSQL schema, recorded PostgreSQL and MongoDB index definitions, and an explicitly labelled equivalent reconstruction of the P1-to-P2 migration with read-only count checks. Eight supplied initial-loading/repair scripts are also included. The supplied base metadata export is included in `postgresql/data/`. The Organism export and comparison PDF are included, and the actual TP1/PS1 workbook inputs are distributed as [release assets](data/raw/README.md). See the loading guide for the schema, metadata and import sequence. A fresh end-to-end reconstruction has not been executed during this repository preparation.
 
 | Path | Contents |
 | --- | --- |
 | `postgresql/queries/` | Eight PostgreSQL query bodies, Q1-Q8 |
 | `postgresql/schema/` | Complete schema-only export, portable table/constraint setup, and explicit indexes |
-| `postgresql/data/00_base_metadata.sql` | Supplied project, dataset, experimental structure and 100 sample records |
+| `postgresql/data/` | Base project/dataset/experimental metadata, 100 samples, and the exported Organism record with import SQL |
+| `data/raw/README.md` | TP1/PS1 release downloads, required local filenames, provenance and checksums |
+| `results/` | Unchanged supplied comparison PDF with per-run timings and summary statistics |
 | `mongodb/pattern1/indexes.js`, `mongodb/pattern2/indexes.js` | Collection and index setup for the recorded snapshot |
 | `docs/SCHEMA_AND_INDEX_GUIDE.md` | Setup order, provenance and recorded-configuration scope |
 | `docs/final_indexes.md` | Supplied index inventory |
@@ -53,4 +55,8 @@ P1 uses `proteomics_pattern1`; P2 uses `proteomics_pattern2`. In the recorded Po
 
 The queries retain their recorded identifiers and output limits: the selected protein label is `Akt1`, Q7 selects `Pcm1`, and Q8 selects `DEX`. They are prototype operations, not a complete multi-study exploration application. Q3 counts phosphopeptide-summary records, not deduplicated biological phosphorylation sites.
 
-See [initial data loading](docs/INITIAL_DATA_LOADING.md) for the eight supplied Python scripts and [the migration guide](docs/IMPORT_AND_MIGRATION_GUIDE.md) for the P1-to-P2 reconstruction. Run the supplied [base metadata export](postgresql/data/README.md) after schema setup and before the six PostgreSQL loaders. The referenced Organism record must also be present; a schema-only restore is insufficient. See [remaining materials](docs/MISSING_IMPORT_SCRIPTS.md) for the precise outstanding items.
+See [initial data loading](docs/INITIAL_DATA_LOADING.md) for the eight supplied Python scripts and [the migration guide](docs/IMPORT_AND_MIGRATION_GUIDE.md) for the P1-to-P2 reconstruction. Run the supplied [base metadata export](postgresql/data/README.md) after schema setup and before the six PostgreSQL loaders. Then run `postgresql/data/01_organism.sql` to insert the separately supplied Organism record; a schema-only restore is insufficient. See [remaining materials](docs/MISSING_IMPORT_SCRIPTS.md) for the precise outstanding items.
+
+## Data and retained measurement evidence
+
+Download the two original workbook assets via [data/raw](data/raw/README.md); GitHub source-code ZIPs do not include release assets. The input files are unchanged, with SHA-256 checksums recorded in [materials_manifest.json](docs/materials_manifest.json). The [comparison PDF](results/README.md) supplies the retained per-run timing record. Individual screenshots and raw Explain files are not included. No measurements were rerun or missing evidence reconstructed during packaging.
