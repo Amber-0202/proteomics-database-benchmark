@@ -4,12 +4,13 @@ Code and experimental materials supporting the thesis *Understanding the Impact 
 
 ## Current contents
 
-The repository currently contains the final benchmark queries, the PostgreSQL schema, recorded PostgreSQL and MongoDB index definitions, and an explicitly labelled equivalent reconstruction of the P1-to-P2 migration with read-only count checks. Eight supplied initial-loading/repair scripts are also included. Actual workbook inputs, PostgreSQL metadata seed/export, and measurement records remain to be added. This snapshot does not yet recreate a populated prototype from the original inputs.
+The repository currently contains the final benchmark queries, the PostgreSQL schema, recorded PostgreSQL and MongoDB index definitions, and an explicitly labelled equivalent reconstruction of the P1-to-P2 migration with read-only count checks. Eight supplied initial-loading/repair scripts are also included. The supplied base metadata export is included in `postgresql/data/`. Actual workbook inputs, the referenced Organism record, and measurement records remain to be added. This snapshot does not yet recreate a populated prototype from the original inputs.
 
 | Path | Contents |
 | --- | --- |
 | `postgresql/queries/` | Eight PostgreSQL query bodies, Q1-Q8 |
 | `postgresql/schema/` | Complete schema-only export, portable table/constraint setup, and explicit indexes |
+| `postgresql/data/00_base_metadata.sql` | Supplied project, dataset, experimental structure and 100 sample records |
 | `mongodb/pattern1/indexes.js`, `mongodb/pattern2/indexes.js` | Collection and index setup for the recorded snapshot |
 | `docs/SCHEMA_AND_INDEX_GUIDE.md` | Setup order, provenance and recorded-configuration scope |
 | `docs/final_indexes.md` | Supplied index inventory |
@@ -52,4 +53,4 @@ P1 uses `proteomics_pattern1`; P2 uses `proteomics_pattern2`. In the recorded Po
 
 The queries retain their recorded identifiers and output limits: the selected protein label is `Akt1`, Q7 selects `Pcm1`, and Q8 selects `DEX`. They are prototype operations, not a complete multi-study exploration application. Q3 counts phosphopeptide-summary records, not deduplicated biological phosphorylation sites.
 
-See [initial data loading](docs/INITIAL_DATA_LOADING.md) for the eight supplied Python scripts and [the migration guide](docs/IMPORT_AND_MIGRATION_GUIDE.md) for the P1-to-P2 reconstruction. The six PostgreSQL loaders require pre-existing metadata records; a schema-only restore is insufficient. See [remaining materials](docs/MISSING_IMPORT_SCRIPTS.md) for the precise outstanding items.
+See [initial data loading](docs/INITIAL_DATA_LOADING.md) for the eight supplied Python scripts and [the migration guide](docs/IMPORT_AND_MIGRATION_GUIDE.md) for the P1-to-P2 reconstruction. Run the supplied [base metadata export](postgresql/data/README.md) after schema setup and before the six PostgreSQL loaders. The referenced Organism record must also be present; a schema-only restore is insufficient. See [remaining materials](docs/MISSING_IMPORT_SCRIPTS.md) for the precise outstanding items.
