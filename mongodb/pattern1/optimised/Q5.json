@@ -1,0 +1,72 @@
+[
+  {
+    "$match": {
+      "condition.model": {
+        "$in": [
+          "CI",
+          "DEX",
+          "TNF",
+          "MPQ",
+          "AA"
+        ]
+      },
+      "condition.insulinState": "INS",
+      "sampleMetadata.omicsLayer": "total_proteome",
+      "totalProteomeMeasurements.geneSymbol": "Akt1"
+    }
+  },
+  {
+    "$project": {
+      "datasetId": 1,
+      "sampleId": 1,
+      "condition": 1,
+      "matchedMeasurements": {
+        "$filter": {
+          "input": "$totalProteomeMeasurements",
+          "as": "m",
+          "cond": {
+            "$and": [
+              {
+                "$eq": [
+                  "$$m.geneSymbol",
+                  "Akt1"
+                ]
+              },
+              {
+                "$eq": [
+                  "$$m.missing",
+                  false
+                ]
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  {
+    "$unwind": "$matchedMeasurements"
+  },
+  {
+    "$project": {
+      "_id": 0,
+      "datasetId": 1,
+      "sampleId": 1,
+      "conditionId": "$condition.conditionId",
+      "model": "$condition.model",
+      "insulinState": "$condition.insulinState",
+      "replicate": "$condition.replicate",
+      "geneSymbol": "$matchedMeasurements.geneSymbol",
+      "uniprotId": "$matchedMeasurements.uniprotId",
+      "proteinAnalyteId": "$matchedMeasurements.proteinAnalyteId",
+      "abundance": "$matchedMeasurements.abundance",
+      "unit": "$matchedMeasurements.unit"
+    }
+  },
+  {
+    "$sort": {
+      "model": 1,
+      "replicate": 1
+    }
+  }
+]

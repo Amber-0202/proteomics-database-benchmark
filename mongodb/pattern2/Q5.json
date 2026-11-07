@@ -1,0 +1,41 @@
+[
+  {
+    "$match": {
+      "geneSymbol": "Akt1",
+      "missing": false,
+      "condition.model": {
+        "$in": [
+          "CI",
+          "DEX",
+          "TNF",
+          "MPQ",
+          "AA"
+        ]
+      },
+      "condition.insulinState": "INS",
+      "omicsLayer": "total_proteome"
+    }
+  },
+  {
+    "$project": {
+      "_id": 0,
+      "datasetId": 1,
+      "sampleId": 1,
+      "conditionId": "$condition.conditionId",
+      "model": "$condition.model",
+      "insulinState": "$condition.insulinState",
+      "replicate": "$condition.replicate",
+      "geneSymbol": 1,
+      "uniprotId": 1,
+      "proteinAnalyteId": 1,
+      "abundance": 1,
+      "unit": 1
+    }
+  },
+  {
+    "$sort": {
+      "model": 1,
+      "replicate": 1
+    }
+  }
+]

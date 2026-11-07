@@ -1,0 +1,115 @@
+[
+  {
+    "$match": {
+      "totalProteomeMeasurements.geneSymbol": "Akt1"
+    }
+  },
+  {
+    "$unwind": "$totalProteomeMeasurements"
+  },
+  {
+    "$match": {
+      "totalProteomeMeasurements.geneSymbol": "Akt1",
+      "totalProteomeMeasurements.missing": false,
+      "totalProteomeMeasurements.abundance": {
+        "$type": "number"
+      }
+    }
+  },
+  {
+    "$group": {
+      "_id": {
+        "datasetId": "$datasetId",
+        "model": "$condition.model"
+      },
+      "basalMean": {
+        "$avg": {
+          "$cond": [
+            {
+              "$eq": [
+                "$condition.insulinState",
+                "BASAL"
+              ]
+            },
+            "$totalProteomeMeasurements.abundance",
+            null
+          ]
+        }
+      },
+      "insulinMean": {
+        "$avg": {
+          "$cond": [
+            {
+              "$eq": [
+                "$condition.insulinState",
+                "INS"
+              ]
+            },
+            "$totalProteomeMeasurements.abundance",
+            null
+          ]
+        }
+      },
+      "basalN": {
+        "$sum": {
+          "$cond": [
+            {
+              "$eq": [
+                "$condition.insulinState",
+                "BASAL"
+              ]
+            },
+            1,
+            0
+          ]
+        }
+      },
+      "insulinN": {
+        "$sum": {
+          "$cond": [
+            {
+              "$eq": [
+                "$condition.insulinState",
+                "INS"
+              ]
+            },
+            1,
+            0
+          ]
+        }
+      }
+    }
+  },
+  {
+    "$match": {
+      "basalMean": {
+        "$ne": null
+      },
+      "insulinMean": {
+        "$ne": null
+      }
+    }
+  },
+  {
+    "$project": {
+      "_id": 0,
+      "datasetId": "$_id.datasetId",
+      "model": "$_id.model",
+      "basalMean": 1,
+      "insulinMean": 1,
+      "basalN": 1,
+      "insulinN": 1,
+      "insulinMinusBasal": {
+        "$subtract": [
+          "$insulinMean",
+          "$basalMean"
+        ]
+      }
+    }
+  },
+  {
+    "$sort": {
+      "insulinMinusBasal": -1
+    }
+  }
+]

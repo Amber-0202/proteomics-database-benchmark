@@ -1,0 +1,36 @@
+[
+  {
+    "$group": {
+      "_id": {
+        "condition": "$condition.conditionId",
+        "model": "$condition.model",
+        "insulinState": "$condition.insulinState",
+        "geneOrProtein": {
+          "$ifNull": [
+            "$geneSymbol",
+            "$uniprotId"
+          ]
+        },
+        "uniprotId": "$uniprotId"
+      },
+      "averageAbundance": {
+        "$avg": "$abundance"
+      },
+      "measurementCount": {
+        "$sum": 1
+      }
+    }
+  },
+  {
+    "$sort": {
+      "_id.geneOrProtein": 1,
+      "_id.condition": 1,
+      "_id.model": 1,
+      "_id.insulinState": 1,
+      "_id.uniprotId": 1
+    }
+  },
+  {
+    "$limit": 10
+  }
+]

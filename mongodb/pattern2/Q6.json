@@ -1,0 +1,142 @@
+[
+  {
+    "$match": {
+      "geneSymbol": "Akt1",
+      "missing": false,
+      "condition.insulinState": {
+        "$in": [
+          "BASAL",
+          "INS"
+        ]
+      },
+      "$expr": {
+        "$isNumber": "$abundance"
+      }
+    }
+  },
+  {
+    "$group": {
+      "_id": {
+        "datasetId": "$datasetId",
+        "model": "$condition.model",
+        "insulinState": "$condition.insulinState"
+      },
+      "abundanceSum": {
+        "$sum": "$abundance"
+      },
+      "measurementCount": {
+        "$sum": 1
+      }
+    }
+  },
+  {
+    "$group": {
+      "_id": {
+        "datasetId": "$_id.datasetId",
+        "model": "$_id.model"
+      },
+      "basalSum": {
+        "$sum": {
+          "$cond": [
+            {
+              "$eq": [
+                "$_id.insulinState",
+                "BASAL"
+              ]
+            },
+            "$abundanceSum",
+            0
+          ]
+        }
+      },
+      "insulinSum": {
+        "$sum": {
+          "$cond": [
+            {
+              "$eq": [
+                "$_id.insulinState",
+                "INS"
+              ]
+            },
+            "$abundanceSum",
+            0
+          ]
+        }
+      },
+      "basalN": {
+        "$sum": {
+          "$cond": [
+            {
+              "$eq": [
+                "$_id.insulinState",
+                "BASAL"
+              ]
+            },
+            "$measurementCount",
+            0
+          ]
+        }
+      },
+      "insulinN": {
+        "$sum": {
+          "$cond": [
+            {
+              "$eq": [
+                "$_id.insulinState",
+                "INS"
+              ]
+            },
+            "$measurementCount",
+            0
+          ]
+        }
+      }
+    }
+  },
+  {
+    "$match": {
+      "basalN": {
+        "$gt": 0
+      },
+      "insulinN": {
+        "$gt": 0
+      }
+    }
+  },
+  {
+    "$project": {
+      "_id": 0,
+      "datasetId": "$_id.datasetId",
+      "model": "$_id.model",
+      "basalMean": {
+        "$divide": [
+          "$basalSum",
+          "$basalN"
+        ]
+      },
+      "insulinMean": {
+        "$divide": [
+          "$insulinSum",
+          "$insulinN"
+        ]
+      },
+      "basalN": 1,
+      "insulinN": 1
+    }
+  },
+  {
+    "$set": {
+      "insulinMinusBasal": {
+        "$subtract": [
+          "$insulinMean",
+          "$basalMean"
+        ]
+      }
+    }
+  },
+  {
+    "$sort": {
+      "insulinMinusBasal": -1
+    }
+  }
+]

@@ -1,0 +1,62 @@
+[
+  {
+    "$match": {
+      "totalProteomeMeasurements.geneSymbol": "Akt1"
+    }
+  },
+  {
+    "$project": {
+      "datasetId": 1,
+      "sampleId": 1,
+      "condition": 1,
+      "matchedMeasurements": {
+        "$filter": {
+          "input": "$totalProteomeMeasurements",
+          "as": "m",
+          "cond": {
+            "$eq": [
+              "$$m.geneSymbol",
+              "Akt1"
+            ]
+          }
+        }
+      }
+    }
+  },
+  {
+    "$unwind": "$matchedMeasurements"
+  },
+  {
+    "$group": {
+      "_id": "$datasetId",
+      "geneSymbol": {
+        "$first": "$matchedMeasurements.geneSymbol"
+      },
+      "uniprotIds": {
+        "$addToSet": "$matchedMeasurements.uniprotId"
+      },
+      "conditions": {
+        "$addToSet": {
+          "conditionId": "$condition.conditionId",
+          "model": "$condition.model",
+          "insulinState": "$condition.insulinState"
+        }
+      },
+      "sampleIds": {
+        "$addToSet": "$sampleId"
+      }
+    }
+  },
+  {
+    "$project": {
+      "_id": 0,
+      "datasetId": "$_id",
+      "geneSymbol": 1,
+      "uniprotIds": 1,
+      "conditions": 1,
+      "sampleCount": {
+        "$size": "$sampleIds"
+      }
+    }
+  }
+]

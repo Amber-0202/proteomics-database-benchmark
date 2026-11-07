@@ -1,0 +1,124 @@
+[
+  {
+    "$match": {
+      "$or": [
+        {
+          "defects.DEX": true
+        },
+        {
+          "emergent.DEX": {
+            "$in": [
+              "up",
+              "down"
+            ]
+          }
+        }
+      ]
+    }
+  },
+  {
+    "$set": {
+      "isDefectiveInSelectedModel": {
+        "$eq": [
+          "$defects.DEX",
+          true
+        ]
+      },
+      "isEmergentInSelectedModel": {
+        "$in": [
+          "$emergent.DEX",
+          [
+            "up",
+            "down"
+          ]
+        ]
+      },
+      "totalDysregulatedModelCount": {
+        "$add": [
+          {
+            "$ifNull": [
+              "$defectiveModelCount",
+              0
+            ]
+          },
+          {
+            "$ifNull": [
+              "$emergentModelCount",
+              0
+            ]
+          }
+        ]
+      }
+    }
+  },
+  {
+    "$set": {
+      "emergentDirectionInSelectedModel": {
+        "$cond": [
+          "$isEmergentInSelectedModel",
+          "$emergent.DEX",
+          null
+        ]
+      },
+      "dysregulationType": {
+        "$switch": {
+          "branches": [
+            {
+              "case": {
+                "$and": [
+                  "$isDefectiveInSelectedModel",
+                  "$isEmergentInSelectedModel"
+                ]
+              },
+              "then": "defective_and_emergent"
+            },
+            {
+              "case": "$isDefectiveInSelectedModel",
+              "then": "defective"
+            },
+            {
+              "case": "$isEmergentInSelectedModel",
+              "then": "emergent"
+            }
+          ],
+          "default": "none"
+        }
+      }
+    }
+  },
+  {
+    "$sort": {
+      "totalDysregulatedModelCount": -1,
+      "defectiveModelCount": -1,
+      "emergentModelCount": -1,
+      "geneSymbol": 1,
+      "site": 1,
+      "phosphopeptideId": 1
+    }
+  },
+  {
+    "$limit": 50
+  },
+  {
+    "$project": {
+      "_id": 0,
+      "selectedModel": {
+        "$literal": "DEX"
+      },
+      "datasetId": 1,
+      "phosphopeptideId": 1,
+      "geneSymbol": 1,
+      "uniprotId": 1,
+      "site": 1,
+      "multiplicity": 1,
+      "ptmLocalisation": 1,
+      "insulinRegulationStatus": 1,
+      "dysregulationType": 1,
+      "emergentDirectionInSelectedModel": 1,
+      "defectiveModelCount": 1,
+      "emergentModelCount": 1,
+      "totalDysregulatedModelCount": 1,
+      "linkedProteinAnalyteId": 1
+    }
+  }
+]

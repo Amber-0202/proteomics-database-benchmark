@@ -1,0 +1,177 @@
+[
+  {
+    "$match": {
+      "totalProteomeMeasurements.geneSymbol": "Akt1",
+      "condition.insulinState": {
+        "$in": [
+          "BASAL",
+          "INS"
+        ]
+      }
+    }
+  },
+  {
+    "$project": {
+      "datasetId": 1,
+      "model": "$condition.model",
+      "insulinState": "$condition.insulinState",
+      "matchedMeasurements": {
+        "$filter": {
+          "input": "$totalProteomeMeasurements",
+          "as": "m",
+          "cond": {
+            "$and": [
+              {
+                "$eq": [
+                  "$$m.geneSymbol",
+                  "Akt1"
+                ]
+              },
+              {
+                "$eq": [
+                  "$$m.missing",
+                  false
+                ]
+              },
+              {
+                "$isNumber": "$$m.abundance"
+              }
+            ]
+          }
+        }
+      }
+    }
+  },
+  {
+    "$project": {
+      "datasetId": 1,
+      "model": 1,
+      "insulinState": 1,
+      "measurementCount": {
+        "$size": "$matchedMeasurements"
+      },
+      "abundanceSum": {
+        "$reduce": {
+          "input": "$matchedMeasurements",
+          "initialValue": 0,
+          "in": {
+            "$add": [
+              "$$value",
+              "$$this.abundance"
+            ]
+          }
+        }
+      }
+    }
+  },
+  {
+    "$group": {
+      "_id": {
+        "datasetId": "$datasetId",
+        "model": "$model"
+      },
+      "basalSum": {
+        "$sum": {
+          "$cond": [
+            {
+              "$eq": [
+                "$insulinState",
+                "BASAL"
+              ]
+            },
+            "$abundanceSum",
+            0
+          ]
+        }
+      },
+      "insulinSum": {
+        "$sum": {
+          "$cond": [
+            {
+              "$eq": [
+                "$insulinState",
+                "INS"
+              ]
+            },
+            "$abundanceSum",
+            0
+          ]
+        }
+      },
+      "basalN": {
+        "$sum": {
+          "$cond": [
+            {
+              "$eq": [
+                "$insulinState",
+                "BASAL"
+              ]
+            },
+            "$measurementCount",
+            0
+          ]
+        }
+      },
+      "insulinN": {
+        "$sum": {
+          "$cond": [
+            {
+              "$eq": [
+                "$insulinState",
+                "INS"
+              ]
+            },
+            "$measurementCount",
+            0
+          ]
+        }
+      }
+    }
+  },
+  {
+    "$match": {
+      "basalN": {
+        "$gt": 0
+      },
+      "insulinN": {
+        "$gt": 0
+      }
+    }
+  },
+  {
+    "$project": {
+      "_id": 0,
+      "datasetId": "$_id.datasetId",
+      "model": "$_id.model",
+      "basalMean": {
+        "$divide": [
+          "$basalSum",
+          "$basalN"
+        ]
+      },
+      "insulinMean": {
+        "$divide": [
+          "$insulinSum",
+          "$insulinN"
+        ]
+      },
+      "basalN": 1,
+      "insulinN": 1
+    }
+  },
+  {
+    "$set": {
+      "insulinMinusBasal": {
+        "$subtract": [
+          "$insulinMean",
+          "$basalMean"
+        ]
+      }
+    }
+  },
+  {
+    "$sort": {
+      "insulinMinusBasal": -1
+    }
+  }
+]

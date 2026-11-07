@@ -1,0 +1,58 @@
+[
+  {
+    "$match": {
+      "insulinRegulationStatus": "defective"
+    }
+  },
+  {
+    "$sort": {
+      "phosphopeptideId": 1
+    }
+  },
+  {
+    "$limit": 5
+  },
+  {
+    "$lookup": {
+      "from": "protein_measurements",
+      "localField": "linkedProteinAnalyteId",
+      "foreignField": "proteinAnalyteId",
+      "pipeline": [
+        {
+          "$sort": {
+            "sampleId": 1
+          }
+        },
+        {
+          "$limit": 10
+        },
+        {
+          "$project": {
+            "_id": 0,
+            "sampleId": 1,
+            "condition": {
+              "conditionId": "$condition.conditionId",
+              "model": "$condition.model",
+              "insulinState": "$condition.insulinState"
+            },
+            "abundance": 1
+          }
+        }
+      ],
+      "as": "linkedProteinMeasurements"
+    }
+  },
+  {
+    "$project": {
+      "_id": 0,
+      "phosphopeptideId": 1,
+      "geneSymbol": 1,
+      "uniprotId": 1,
+      "site": 1,
+      "insulinRegulationStatus": 1,
+      "defectiveModelCount": 1,
+      "linkedProteinAnalyteId": 1,
+      "linkedProteinMeasurements": 1
+    }
+  }
+]

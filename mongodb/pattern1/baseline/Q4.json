@@ -1,0 +1,48 @@
+[
+  {
+    "$match": {
+      "totalProteomeMeasurements.geneSymbol": "Akt1"
+    }
+  },
+  {
+    "$unwind": "$totalProteomeMeasurements"
+  },
+  {
+    "$match": {
+      "totalProteomeMeasurements.geneSymbol": "Akt1"
+    }
+  },
+  {
+    "$group": {
+      "_id": "$datasetId",
+      "geneSymbol": {
+        "$first": "$totalProteomeMeasurements.geneSymbol"
+      },
+      "uniprotIds": {
+        "$addToSet": "$totalProteomeMeasurements.uniprotId"
+      },
+      "conditions": {
+        "$addToSet": {
+          "conditionId": "$condition.conditionId",
+          "model": "$condition.model",
+          "insulinState": "$condition.insulinState"
+        }
+      },
+      "sampleIds": {
+        "$addToSet": "$sampleId"
+      }
+    }
+  },
+  {
+    "$project": {
+      "_id": 0,
+      "datasetId": "$_id",
+      "geneSymbol": 1,
+      "uniprotIds": 1,
+      "conditions": 1,
+      "sampleCount": {
+        "$size": "$sampleIds"
+      }
+    }
+  }
+]
