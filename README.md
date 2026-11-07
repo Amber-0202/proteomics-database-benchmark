@@ -4,7 +4,7 @@ Code and experimental materials supporting the thesis *Understanding the Impact 
 
 ## Current contents
 
-The repository currently contains the final benchmark queries, the PostgreSQL schema, and the recorded PostgreSQL and MongoDB index definitions. Data import and migration scripts, datasets, and measurement records will be added separately. This snapshot creates database structures and provides queries, but does not yet populate the prototype data.
+The repository currently contains the final benchmark queries, the PostgreSQL schema, recorded PostgreSQL and MongoDB index definitions, and an explicitly labelled equivalent reconstruction of the P1-to-P2 migration with read-only count checks. The initial P1/PostgreSQL data loaders, actual input datasets or database exports, and measurement records remain to be added. This snapshot does not yet recreate a populated prototype from the original inputs.
 
 | Path | Contents |
 | --- | --- |
@@ -13,6 +13,9 @@ The repository currently contains the final benchmark queries, the PostgreSQL sc
 | `mongodb/pattern1/indexes.js`, `mongodb/pattern2/indexes.js` | Collection and index setup for the recorded snapshot |
 | `docs/SCHEMA_AND_INDEX_GUIDE.md` | Setup order, provenance and recorded-configuration scope |
 | `docs/final_indexes.md` | Supplied index inventory |
+| `scripts/mongodb/` | Reconstructed P1-to-P2 migration and read-only count checks |
+| `docs/IMPORT_AND_MIGRATION_GUIDE.md` | Migration provenance, prerequisites and execution order |
+| `docs/MISSING_IMPORT_SCRIPTS.md` | Initial loading materials still needed |
 | `mongodb/pattern1/baseline/` | Eight P1 baseline pipelines, Q1-Q8 |
 | `mongodb/pattern1/optimised/` | Five separately evaluated P1 optimisations: Q2, Q4, Q5, Q6 and Q8 |
 | `mongodb/pattern2/` | Eight P2 pipelines, Q1-Q8 |
@@ -45,4 +48,4 @@ P1 uses `proteomics_pattern1`; P2 uses `proteomics_pattern2`. In the recorded Po
 
 The queries retain their recorded identifiers and output limits: the selected protein label is `Akt1`, Q7 selects `Pcm1`, and Q8 selects `DEX`. They are prototype operations, not a complete multi-study exploration application. Q3 counts phosphopeptide-summary records, not deduplicated biological phosphorylation sites.
 
-Data source and reconstruction instructions will accompany the data and import scripts when those materials are added.
+See [the import and migration guide](docs/IMPORT_AND_MIGRATION_GUIDE.md) for the supplied reconstruction and [the missing-materials checklist](docs/MISSING_IMPORT_SCRIPTS.md) for the initial loaders. Data source and restoration/loading instructions will accompany the remaining materials.
